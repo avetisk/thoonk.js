@@ -22,6 +22,26 @@ var Feed = exports.Feed = require("./feed.js").Feed,
  * @param port
  */
 var Thoonk = exports.Thoonk = function Thoonk(host, port, db) {
+    if (! host && ! port && ! db) {
+      return this;
+    }
+
+    this.open(host, port, db);
+}
+
+//extend Thoonk with EventEmitter
+Thoonk.super_ = EventEmitter;
+Thoonk.prototype = Object.create(EventEmitter.prototype, {
+    constructor: {
+        value: Thoonk,
+        enumerable: false
+    }
+});
+
+/**
+ * Let's initialize() after creating a new instance
+ */
+Thoonk.prototype.open = function (host, port, db) {
     host || (host = "127.0.0.1");
     port || (port = 6379);
     db || (db = 0);
@@ -51,16 +71,7 @@ var Thoonk = exports.Thoonk = function Thoonk(host, port, db) {
     this.mredis.on("error", function(error) {
         console.log("Error " + error);
     });
-}
-
-//extend Thoonk with EventEmitter
-Thoonk.super_ = EventEmitter;
-Thoonk.prototype = Object.create(EventEmitter.prototype, {
-    constructor: {
-        value: Thoonk,
-        enumerable: false
-    }
-});
+};
 
 //map the event to the subscription callback
 Thoonk.prototype.handle_message = function(channel, msg) {

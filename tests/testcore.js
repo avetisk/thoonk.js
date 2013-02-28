@@ -44,10 +44,8 @@ function TestObject(should_events, start_function) {
         this.extra_tests++;
         if(success) {
             process.stdout.write(checkmark);
-            process.stdout.flush();
         } else {
             process.stdout.write(failmark);
-            process.stdout.flush();
             this.manual_errors.push(msg);
         }
     }
@@ -61,24 +59,20 @@ function TestObject(should_events, start_function) {
         }
         if(pass) {
             process.stdout.write(checkmark);
-            process.stdout.flush();
             this.extra_tests += 1;
         } else {
             this.manual_errors.push(JSON.stringify(item1) + " != " + JSON.stringify(item2));
             process.stdout.write(failmark);
-            process.stdout.flush();
         }
     }
 
     this.should = function(eevent) {
         if(this.check_events.indexOf(eevent) == -1) {
-            this.error_events.push(eevent); 
+            this.error_events.push(eevent);
             process.stdout.write(failmark);
-            process.stdout.flush();
         } else {
             this.good_events.push(eevent);
             process.stdout.write(checkmark);
-            process.stdout.flush();
         }
     }
 
@@ -86,7 +80,7 @@ function TestObject(should_events, start_function) {
         if(this.error_events.length || this.manual_errors.length) {
             console.log(':');
             this.error_events.forEach(function(eevent, idx) {
-               console.log('Event "' + eevent + '" should not have happened.'); 
+               console.log('Event "' + eevent + '" should not have happened.');
             });
             this.manual_errors.forEach(function(msg, idx) {
                 console.log(msg);
@@ -102,7 +96,7 @@ function TestObject(should_events, start_function) {
                     delete(this.check_events[this.check_events.indexOf(eevent)]);
                 }.bind(this));
                 this.check_events.forEach(function(eevent, idx) {
-                    console.log('Event "' + eevent + '" should have happened.'); 
+                    console.log('Event "' + eevent + '" should have happened.');
                 });
                 this.emit("done", this.configobj);
             } else {
